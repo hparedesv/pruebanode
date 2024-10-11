@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getTurns, addTurn, editTurn, removeTurn } = require('../../infrastructure/controllers/turnController');
+const { getTurns, addTurn, editTurn, removeTurn } = require('../controllers/turnController');
 
 /**
  * @swagger
@@ -31,10 +31,13 @@ router.get('/list', getTurns);
  *             properties:
  *               description:
  *                 type: string
+ *                 description: Descripción del turno (2 letras mayúsculas y 4 números).
  *               cash_cashid:
  *                 type: integer
+ *                 description: ID de la caja asociada.
  *               usergestorid:
  *                 type: integer
+ *                 description: ID del gestor.
  *     responses:
  *       201:
  *         description: Turno creado exitosamente.
@@ -61,20 +64,33 @@ router.post('/create', addTurn);
  *               turnid:
  *                 type: integer
  *                 description: ID del turno a actualizar.
+ *                 example: 1
  *               description:
  *                 type: string
- *                 description: Nueva descripción del turno (2 letras mayúsculas y 4 números).
+ *                 description: Descripción del turno.
+ *                 example: 'AA1234'
  *               cash_cashid:
  *                 type: integer
- *                 description: ID actualizado de la caja asociada.
+ *                 description: ID de la caja asociada al turno.
+ *                 example: 2
  *               usergestorid:
  *                 type: integer
- *                 description: ID actualizado del gestor.
+ *                 description: ID del usuario gestor del turno.
+ *                 example: 3
+ *               date:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Fecha del turno.
+ *                 example: '2024-10-11T00:00:00Z'
+ *               active:
+ *                 type: boolean
+ *                 description: Estado del turno (activo o inactivo).
+ *                 example: true
  *     responses:
  *       200:
  *         description: Turno actualizado exitosamente.
  *       400:
- *         description: Datos no válidos o faltantes.
+ *         description: Error en la solicitud, datos no válidos.
  *       500:
  *         description: Error del servidor.
  */
@@ -96,14 +112,16 @@ router.put('/update', editTurn);
  *               turnid:
  *                 type: integer
  *                 description: ID del turno a eliminar.
+ *                 example: 1
  *     responses:
  *       200:
  *         description: Turno eliminado exitosamente.
  *       400:
- *         description: Datos no válidos o faltantes.
+ *         description: Error en la solicitud, datos no válidos.
  *       500:
  *         description: Error del servidor.
  */
 router.delete('/delete', removeTurn);
+
 
 module.exports = router;

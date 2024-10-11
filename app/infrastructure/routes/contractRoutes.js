@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getContracts, addContract, editContract, removeContract } = require('../../infrastructure/controllers/contractController');
+const { getContracts, addContract, editContract, removeContract } = require('../controllers/contractController');
 
 /**
  * @swagger
@@ -32,28 +32,22 @@ router.get('/list', getContracts);
  *               startdate:
  *                 type: string
  *                 format: date-time
- *                 description: Fecha de inicio del contrato en formato AAAA-MM-DD HH:MM.
  *                 example: "2024-10-12 14:00"
  *               enddate:
  *                 type: string
  *                 format: date-time
- *                 description: Fecha de finalización del contrato en formato AAAA-MM-DD HH:MM.
  *                 example: "2025-10-12 14:00"
  *               service_serviceid:
  *                 type: integer
- *                 description: ID del servicio asociado al contrato.
  *                 example: 1
  *               statuscontract_statusid:
  *                 type: string
- *                 description: ID del estado del contrato (por ejemplo, VIG para vigente, SUS para sustituido).
  *                 example: "VIG"
  *               client_clientid:
  *                 type: integer
- *                 description: ID del cliente asociado al contrato.
  *                 example: 3
  *               methodpayment_methodpaymentid:
  *                 type: integer
- *                 description: ID del método de pago asociado al contrato.
  *                 example: 2
  *     responses:
  *       201:
@@ -80,24 +74,19 @@ router.post('/create', addContract);
  *             properties:
  *               contractid:
  *                 type: integer
- *                 description: ID del contrato que se va a actualizar.
  *                 example: 5
  *               service_serviceid:
  *                 type: integer
- *                 description: Nuevo ID del servicio asociado al contrato.
  *                 example: 2
  *               statuscontract_statusid:
  *                 type: string
- *                 description: Nuevo estado del contrato (por ejemplo, VIG para vigente, SUS para sustituido).
  *                 example: "SUS"
  *               methodpayment_methodpaymentid:
  *                 type: integer
- *                 description: Nuevo ID del método de pago asociado al contrato.
  *                 example: 3
  *               enddate:
  *                 type: string
  *                 format: date-time
- *                 description: Nueva fecha de finalización del contrato en formato AAAA-MM-DD HH:MM.
  *                 example: "2025-12-31 23:59"
  *     responses:
  *       200:

@@ -1,29 +1,64 @@
-const pool = require('../../application/config/db');
-const getAllUsers = async () => {
-    const result = await pool.query('SELECT * FROM "user"');
-    return result.rows;
-};
-const createUser = async (username, email, password, rol_rolid, userstatus_statusid) => {
-    const result = await pool.query(
-        'INSERT INTO "user" (username, email, password, rol_rolid, userstatus_statusid) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-        [username, email, password, rol_rolid, userstatus_statusid]
-    );
-    return result.rows[0];
-};
-const updateUserInDB = async (userid, username, email, password, rol_rolid) => {
-    const result = await pool.query(
-        'UPDATE "user" SET username = $2, email = $3, password = $4, rol_rolid = $5 WHERE userid = $1 RETURNING *',
-        [userid, username, email, password, rol_rolid]
-    );
-    return result.rows[0];
-};
+const { DataTypes } = require('sequelize');
+const sequelize = require('../../application/config/sequelize');
 
-const deleteUserInDB = async (userid) => {
-    const result = await pool.query(
-        'UPDATE "user" SET active = false WHERE userid = $1 RETURNING *',
-        [userid]
-    );
-    return result.rows[0];
-};
+const User = sequelize.define('User', {
+    userid: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    username: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
+        validate: {
+            len: [8, 50],
+            is: /^[A-Za-z\d]+$/i,
+        },
+    },
+    email: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+        unique: true,
+        validate: {
+            isEmail: true,
+        },
+    },
+    password: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+        validate: {
+            len: [8, 30],
+            is: /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]+$/i,
+        },
+    },
+    rol_rolid: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    usercreate: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+    },
+    createdate: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+    },
+    dateapproval: {
+        type: DataTypes.DATE,
+        allowNull: true,
+    },
+    userstatus_statusid: {
+        type: DataTypes.STRING(3),
+        allowNull: false,
+    },
+    active: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+    }
+}, {
+    freezeTableName: true,
+    tableName: 'user',
+    timestamps: false,
+});
 
-module.exports = { getAllUsers, createUser, updateUserInDB, deleteUserInDB };
+module.exports = User;

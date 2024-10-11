@@ -6,10 +6,10 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
-const userRoutes = require('./app/api/routes/userRoutes');
-const clientRoutes = require('./app/api/routes/clientRoutes');
-const turnRoutes = require('./app/api/routes/turnRoutes');
-const contractRoutes = require('./app/api/routes/contractRoutes');
+const userRoutes = require('./app/infrastructure/routes/userRoutes');
+const clientRoutes = require('./app/infrastructure/routes/clientRoutes');
+const turnRoutes = require('./app/infrastructure/routes/turnRoutes');
+const contractRoutes = require('./app/infrastructure/routes/contractRoutes');
 const app = express();
 
 const swaggerOptions = {
@@ -27,7 +27,7 @@ const swaggerOptions = {
             },
         ],
     },
-    apis: ['./app/routes/*.js'],
+    apis: ['./app/infrastructure/routes/*.js'],
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);

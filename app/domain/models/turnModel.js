@@ -1,27 +1,38 @@
-const pool = require('../../application/config/db');
-const getAllTurns = async () => {
-    const result = await pool.query('SELECT * FROM turn');
-    return result.rows;
-};
-const createTurn = async (description, cash_cashid, usergestorid) => {
-    const result = await pool.query(
-        'INSERT INTO turn (description, cash_cashid, usergestorid) VALUES ($1, $2, $3) RETURNING *',
-        [description, cash_cashid, usergestorid]
-    );
-    return result.rows[0];
-};
-const updateTurn = async (turnid, description, cash_cashid, usergestorid) => {
-    const result = await pool.query(
-        'UPDATE turn SET description = $1, cash_cashid = $2, usergestorid = $3 WHERE turnid = $4 RETURNING *',
-        [description, cash_cashid, usergestorid, turnid]
-    );
-    return result.rows[0];
-};
-const deleteTurn = async (turnid) => {
-    const result = await pool.query(
-        'UPDATE turn SET active = false WHERE turnid = $1 RETURNING *',
-        [turnid]
-    );
-    return result.rows[0];
-};
-module.exports = { getAllTurns, createTurn, updateTurn, deleteTurn };
+const { DataTypes } = require('sequelize');
+const sequelize = require('../../application/config/sequelize');
+
+const Turn = sequelize.define('Turn', {
+    turnid: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    description: {
+        type: DataTypes.STRING(6),
+        allowNull: false,
+        validate: {
+            is: /^[A-Z]{2}\d{4}$/,
+        },
+    },
+    cash_cashid: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    usergestorid: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+    },
+    date: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+    },
+    active: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+    },
+}, {
+    timestamps: false,
+    tableName: 'turn',
+});
+
+module.exports = Turn;
