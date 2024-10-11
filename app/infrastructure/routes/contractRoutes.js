@@ -21,7 +21,7 @@ router.get('/list', getContracts);
  * /api/contracts/create:
  *   post:
  *     summary: Crear un nuevo contrato
- *     description: Crea un nuevo contrato en el sistema.
+ *     description: Crea un nuevo contrato para un servicio de internet, vinculando el cliente y el método de pago.
  *     requestBody:
  *       required: true
  *       content:
